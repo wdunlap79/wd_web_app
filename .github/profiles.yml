@@ -1,0 +1,13 @@
+web_app:
+  outputs:
+    docs_prod:
+      account: "{{ env_var ('SNOWFLAKE_ACCOUNT')}}"
+      database: "{{ env_var ('SNOWFLAKE_PROD_DATABASE')}}"
+      password: "{{ env_var ('SVC_DBT_SNOWFLAKE_PASSWORD')}}"
+      role: "{{ env_var ('SVC_DBT_SNOWFLAKE_ROLE')}}"
+      schema: "{{ env_var ('SNOWFLAKE_PROD_SCHEMA')}}"
+      threads: 4
+      type: snowflake
+      user: "{{ env_var ('SVC_DBT_SNOWFLAKE_USER')}}"
+      warehouse: "{{ env_var ('SVC_DBT_SNOWFLAKE_WH')}}"
+  target: docs_prod

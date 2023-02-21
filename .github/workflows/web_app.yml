@@ -1,0 +1,58 @@
+name: update_web_app
+
+on: workflow_dispatch
+
+env:
+  DBT_PROFILES_DIR: ./.github
+  SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+  SNOWFLAKE_PROD_DATABASE: ${{ secrets.SNOWFLAKE_PROD_DATABASE }}
+  SVC_DBT_SNOWFLAKE_PASSWORD: ${{ secrets.SVC_DBT_SNOWFLAKE_PASSWORD }}
+  SVC_DBT_SNOWFLAKE_ROLE: ${{ secrets.SVC_DBT_SNOWFLAKE_ROLE }}
+  SNOWFLAKE_PROD_SCHEMA: ${{ secrets.SNOWFLAKE_PROD_SCHEMA }}
+  SVC_DBT_SNOWFLAKE_USER: ${{ secrets.SVC_DBT_SNOWFLAKE_USER }}
+  SVC_DBT_SNOWFLAKE_WH: ${{ secrets.SVC_DBT_SNOWFLAKE_WH }}
+
+jobs:
+  upload-docs:
+    name: direct runner
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main branch
+        uses: actions/checkout@v3
+
+      - name: install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          dbt deps
+
+      - name: generate documentation
+        run: dbt docs generate --target web_app
+
+      - name: archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-pages
+          path: /home/runner/work/DBT_FBT/DBT_FBT/target/
+
+  deploy:
+    needs: upload-docs
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
