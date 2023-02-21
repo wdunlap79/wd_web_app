@@ -1,6 +1,6 @@
 #~/.github/workflows/build_and_deploy_azure_web_app.yml
 
-name: build and deploy azure web app #name of the job that will appear in github actions
+name: build and deploy azure web app refine #name of the job that will appear in github actions
 
 on: workflow_dispatch # manual deployment of job
 
