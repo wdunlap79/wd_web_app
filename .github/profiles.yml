@@ -1,6 +1,6 @@
 web_app:
   outputs:
-    docs_prod:
+    web_app:
       account: "{{ env_var ('SNOWFLAKE_ACCOUNT')}}"
       database: "{{ env_var ('SNOWFLAKE_PROD_DATABASE')}}"
       password: "{{ env_var ('SVC_DBT_SNOWFLAKE_PASSWORD')}}"
@@ -10,4 +10,4 @@ web_app:
       type: snowflake
       user: "{{ env_var ('SVC_DBT_SNOWFLAKE_USER')}}"
       warehouse: "{{ env_var ('SVC_DBT_SNOWFLAKE_WH')}}"
-  target: docs_prod
+  target: web_app
