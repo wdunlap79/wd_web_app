@@ -63,6 +63,5 @@ jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs,
           action: "upload"
           ###### Repository/Build Configurations ######
           app_location: ""
-          api_location: "api" # Api source code path relative to repository root - optional
           skip_app_build: true
           ###### End of Repository/Build Configurations ######
