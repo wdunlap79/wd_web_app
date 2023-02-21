@@ -49,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: website
-          path: ${{ github.workspace }}/dbt_docs
+          path: ${{ github.workspace }}
 
       - name: Build And Deploy
         id: builddeploy
@@ -59,7 +59,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for GitHub integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: "/dbt_docs"
+          app_location: ""
           api_location: "api" # Api source code path relative to repository root - optional
           skip_app_build: true
           ###### End of Repository/Build Configurations ######

@@ -52,7 +52,7 @@ jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs,
         uses: actions/download-artifact@v3
         with:
           name: website
-          path: ${{ github.workspace }}
+          path: ${{ github.workspace }}/dbt_docs
 
       - name: Build And Deploy
         id: builddeploy
@@ -62,6 +62,6 @@ jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs,
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for GitHub integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: ""
+          app_location: "/dbt_docs"
           skip_app_build: true
           ###### End of Repository/Build Configurations ######
