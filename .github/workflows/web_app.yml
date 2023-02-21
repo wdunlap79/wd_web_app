@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: github-pages
-          path: /home/runner/work/DBT_FBT/DBT_FBT/target/
+          path: /home/runner/work/wd_web_app/wd_web_app/target/
 
   deploy:
     needs: upload-docs
