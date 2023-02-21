@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install dbt-snowflake
           dbt deps
 
       - name: generate documentation
