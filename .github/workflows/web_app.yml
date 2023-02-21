@@ -1,4 +1,4 @@
-name: update_web_app
+name: update_web_app_github_pages
 
 on: workflow_dispatch
 
