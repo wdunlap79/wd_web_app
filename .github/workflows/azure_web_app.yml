@@ -42,7 +42,7 @@ jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs,
         uses: actions/upload-artifact@v3
         with:
           name: website
-          path: /home/runner/work/${{ github.workspace }}/${{ github.workspace }}/target/
+          path: ${{ github.workspace }}/target/
 
   deploy:
     runs-on: ubuntu-latest
