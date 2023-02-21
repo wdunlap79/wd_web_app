@@ -1,4 +1,4 @@
-name: deploy azure web app
+name: old deploy azure web app
 
 on: workflow_dispatch
 

@@ -1,4 +1,4 @@
-name: update_web_app
+name: update_web_app_github_pages
 
 on: workflow_dispatch
 
@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install dbt-snowflake
           dbt deps
 
       - name: generate documentation
