@@ -74,5 +74,21 @@ jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs,
           name: main_manifest
           path: ${{ github.workspace }} #store the main branch manifest.json in root directory of repository
 
+      - name: Run queries
+        uses: anecdotes-ai/snowflake-query@v1
+        id: run_queries
+        with:
+            snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+            snowflake_warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+            snowflake_username: ${{ secrets.SVC_DBT_SNOWFLAKE_USER }}
+            snowflake_password: ${{ secrets.SVC_DBT_SNOWFLAKE_PASSWORD }}
+            queries: 'create or replace database DB_ANALYTICS_CLONE clone DB_ANALYTICS'
+            # single quote is escaped with another single quote
+
       - name: run changed models
-        run: dbt build -s state:modified --state ${{ github.workspace }}
+        run: dbt build -s state:modified+ --state ${{ github.workspace }}  --target dev_clone
+
+
+# for any CI job: i.e a PR from feature to dev or from dev to main
+# for feature to dev: it should clone the dev_database
+# and then run build command on the clone
