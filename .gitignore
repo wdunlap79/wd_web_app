@@ -4,3 +4,4 @@ logs/
 .venv/
 target/partial_parse.msgpack
 target/graph.gpickle
+target/partial_parse.msgpack
