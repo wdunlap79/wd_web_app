@@ -1,5 +1,6 @@
-
-target/
+target
 dbt_packages/
 logs/
 .venv/
+target/graph.gpickle
+target/partial_parse.msgpack

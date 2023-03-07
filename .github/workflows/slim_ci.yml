@@ -1,0 +1,94 @@
+#~/.github/workflows/build_and_deploy_azure_web_app.yml
+
+name: build only changed models #name of the job that will appear in github actions
+
+# on: workflow_dispatch # use this during testing for manual deployment of job
+
+on: # use this to deploy once PR to main branch succeeds and changes are pushed.
+  pull_request:
+    types: [opened, reopened]
+
+env: #create environment variables that will be accessible by the environment you're about to generate
+  DBT_PROFILES_DIR: ./.github #tell dbt where to look for the profiles.yml file
+
+  #below secrets are used in the profiles.yml
+  SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+  SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+  SVC_DBT_SNOWFLAKE_PASSWORD: ${{ secrets.SVC_DBT_SNOWFLAKE_PASSWORD }}
+  SVC_DBT_SNOWFLAKE_ROLE: ${{ secrets.SVC_DBT_SNOWFLAKE_ROLE }}
+  SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+  SVC_DBT_SNOWFLAKE_USER: ${{ secrets.SVC_DBT_SNOWFLAKE_USER }}
+  SVC_DBT_SNOWFLAKE_WH: ${{ secrets.SVC_DBT_SNOWFLAKE_WH }}
+
+jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs, the 2nd job will deploy the docs to the azure web app
+  build_main_manifest: # this job will create a local dbt environment on a ubuntu machine, install python and dbt, run dbt docs generate, and save the docs as a github artifact
+    #designate the image for the machine
+    name: direct runner
+    runs-on: ubuntu-latest
+
+    #
+    steps:
+      - name: Check out main branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-snowflake
+          dbt deps
+
+      - name: archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: main_manifest
+          path: ${{ github.workspace }}/target/manifest.json
+
+  run_changed_models: #gets the artifact created during build job and deploys it to azure web app
+    runs-on: ubuntu-latest
+    needs: build_main_manifest #requires the build job to complete before starting
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-snowflake
+          dbt deps
+
+      - name: download main branch manifest.json
+        uses: actions/download-artifact@v3 #get the artifact called 'main_manifest' created by the build job.
+        with:
+          name: main_manifest
+          path: ${{ github.workspace }} #store the main branch manifest.json in root directory of repository
+
+      - name: Run queries
+        uses: anecdotes-ai/snowflake-query@v1
+        id: run_queries
+        with:
+            snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+            snowflake_warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+            snowflake_username: ${{ secrets.SVC_DBT_SNOWFLAKE_USER }}
+            snowflake_password: ${{ secrets.SVC_DBT_SNOWFLAKE_PASSWORD }}
+            queries: 'create or replace database DB_ANALYTICS_CLONE clone DB_ANALYTICS'
+            # single quote is escaped with another single quote
+
+      - name: run changed models
+        run: dbt build -s state:modified+ --state ${{ github.workspace }}  --target dev_clone
+
+
+# for any CI job: i.e a PR from feature to dev or from dev to main
+# for feature to dev: it should clone the dev_database
+# and then run build command on the clone
