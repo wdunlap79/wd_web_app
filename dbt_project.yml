@@ -35,4 +35,5 @@ models:
   web_app:
     # Applies to all files under models/example/
     example:
-      materialized: view
+      +schema: staging
+      +materialized: view
