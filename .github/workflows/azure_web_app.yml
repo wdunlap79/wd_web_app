@@ -21,15 +21,6 @@ env: #create environment variables that will be accessible by the environment yo
   SVC_DBT_SNOWFLAKE_USER: ${{ secrets.SVC_DBT_SNOWFLAKE_USER }}
   SVC_DBT_SNOWFLAKE_WH: ${{ secrets.SVC_DBT_SNOWFLAKE_WH }}
 
-SNOWFLAKE_ACCOUNT
-SNOWFLAKE_DATABASE
-SVC_DBT_SNOWFLAKE_PASSWORD
-SVC_DBT_SNOWFLAKE_ROLE
-SNOWFLAKE_SCHEMA
-SVC_DBT_SNOWFLAKE_USER
-SVC_DBT_SNOWFLAKE_WH
-
-
 jobs: # there are 2 jobs (build and deploy).  The first job will build dbt docs, the 2nd job will deploy the docs to the azure web app
   build: # this job will create a local dbt environment on a ubuntu machine, install python and dbt, run dbt docs generate, and save the docs as a github artifact
     #designate the image for the machine
