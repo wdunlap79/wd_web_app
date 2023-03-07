@@ -1,0 +1,25 @@
+#~/.github/profiles.yml
+
+web_app: # dbt project name - should match project name in first line of your dbt_project.yml
+  target: dev # The target key, is the default target (profile) you connect with
+  outputs: # a list of the targets (or profiles) you can connect to snowflake with
+    dev: # the target name (profile name)
+      account: "{{ env_var ('SNOWFLAKE_ACCOUNT')}}"
+      database: WD_ANALYTICS # use the database from your development 'deployment environment' in dbt cloud
+      password: "{{ env_var ('SVC_DBT_SNOWFLAKE_PASSWORD')}}"
+      role: "{{ env_var ('SVC_DBT_SNOWFLAKE_ROLE')}}"
+      schema: DEV #use the default schema from your development 'deployment environment' in dbt cloud
+      threads: 4
+      type: snowflake
+      user: "{{ env_var ('SVC_DBT_SNOWFLAKE_USER')}}"
+      warehouse: "{{ env_var ('SVC_DBT_SNOWFLAKE_WH')}}"
+    dev_clone: # the target name (profile name)
+      account: "{{ env_var ('SNOWFLAKE_ACCOUNT')}}"
+      database: WD_ANALYTICS_CLONE # use the database from your development 'deployment environment' in dbt cloud
+      password: "{{ env_var ('SVC_DBT_SNOWFLAKE_PASSWORD')}}"
+      role: "{{ env_var ('SVC_DBT_SNOWFLAKE_ROLE')}}"
+      schema: DEV #use the default schema from your development 'deployment environment' in dbt cloud
+      threads: 4
+      type: snowflake
+      user: "{{ env_var ('SVC_DBT_SNOWFLAKE_USER')}}"
+      warehouse: "{{ env_var ('SVC_DBT_SNOWFLAKE_WH')}}"
