@@ -2,12 +2,12 @@
 
 name: build and deploy azure web app #name of the job that will appear in github actions
 
-# on: workflow_dispatch # use this during testing for manual deployment of job
+on: workflow_dispatch # use this during testing for manual deployment of job
 
-on: # use this to deploy once PR to main branch succeeds and changes are pushed.
-  push:
-    branches:
-      - "main"
+# on: # use this to deploy once PR to main branch succeeds and changes are pushed.
+#   push:
+#     branches:
+#       - "main"
 
 env: #create environment variables that will be accessible by the environment you're about to generate
   DBT_PROFILES_DIR: ./.github #tell dbt where to look for the profiles.yml file
