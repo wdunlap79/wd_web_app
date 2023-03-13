@@ -3,7 +3,7 @@ version: 2
 
 models:
     - name: my_first_dbt_model
-      description: "A starter dbt model"
+      description: "My first starter dbt model"
       columns:
           - name: id
             description: "The primary key for this table"
@@ -12,10 +12,10 @@ models:
                 - not_null
 
     - name: my_second_dbt_model
-      description: "A starter dbt model"
+      description: "my second starter dbt model"
       columns:
           - name: id
-            description: "The primary key for this table"
+            description: "The primary key for the second table"
             tests:
                 - unique
                 - not_null

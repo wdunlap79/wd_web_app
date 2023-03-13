@@ -35,5 +35,8 @@ models:
   web_app:
     # Applies to all files under models/example/
     example:
+      +persist_docs:
+        relation: true
+        columns: true
       +schema: staging
       +materialized: view
