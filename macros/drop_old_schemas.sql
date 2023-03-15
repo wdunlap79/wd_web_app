@@ -9,8 +9,11 @@
 
         {% set drop_schemas = run_query(sql).columns[1].values() %}
         {% for schema in drop_schemas %}
-            {# drop schema {{ database }}.{{ schema }} #}
-            log('Schema {{ schema }} was dropped from {{ database }}', info=true) 
+            {% set sql %}
+            drop schema {{ database }}.{{ schema }};
+            {% endset %}
+            run_query(sql)
+            {{ log("Schema " ~ schema.upper() ~ " was dropped from database " ~ database.upper(), info=true) }} 
         {% endfor %}
 
 {% endmacro %}
