@@ -34,6 +34,7 @@ job_id: {job_id}
 # use environment variables to set configuration
 #------------------------------------------------------------------------------
 req_auth_header = {'Authorization': f'Token {api_key}'}
+
 req_job_url = f'{api_base}/api/v2/accounts/{account_id}/jobs/{job_id}/run/'
 run_status_map = { # dbt run statuses are encoded as integers. This map provides a human-readable status
   1:  'Queued',
