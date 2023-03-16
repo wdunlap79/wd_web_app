@@ -1,3 +1,9 @@
+{{ config(
+    materialized = 'incremental'
+    unique_key = order_id
+    )
+}}
+
 with
 
 orders as (
@@ -6,7 +12,7 @@ orders as (
 
 stage as (
     select
-        id::integer as id
+        order_id::integer as id
 	    ,USER_ID::integer as user_id
 	    ,ORDER_DATE::DATE as order_date
 	    ,STATUS::VARCHAR as status
@@ -15,3 +21,8 @@ stage as (
 )
 
 select * from stage
+
+ {% if is_incremental() %}
+     -- this filter will only be applied on an incremental run
+     where order_date > (select max(order_date) from {{ this }}) 
+ {% endif %}
