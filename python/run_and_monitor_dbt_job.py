@@ -90,6 +90,8 @@ def get_run_status(url, headers) -> str:
 
 def main():
   print('Beginning request for job run...')
+  print(f'job url: {req_job_url}')
+  print(f'req_auth_header: {req_auth_header}')
 
   # run job
   run_id: int = None
