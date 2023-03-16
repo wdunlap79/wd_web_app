@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: mock_data
+    database: wd_raw
+    schema: mock_data
+    tables:
+      - name: mock_orders
+        description: a list of mock orders
+        columns:
+          - name: order_id
+            tests:
+              - unique
+              - not_null
+

@@ -1,0 +1,13 @@
+selectors:
+  - name: incremental_staging_jaffle
+    default: false
+    definition:
+      union:
+        - method: path
+          value: staging/jaffle_shop
+
+          children: true
+          indirect_selection: eager
+        - method: config.materialized
+          value: view
+

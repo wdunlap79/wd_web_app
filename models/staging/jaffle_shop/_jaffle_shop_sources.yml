@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: jaffle_shop
+    description: customer and order data for jaffles
+    database: wd_raw
+    schema: jaffle_shop
+    loaded_at_field: _ETL_LOADED_AT
+    meta:
+      author: wdunlap
+      source_maturity: low
+      jo_mama: is great
+    freshness:
+      warn_after: {count: 1, period: hour}
+    tables:
+      - name: customers
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: orders
+        freshness:
+          filter: where order_date > (date() - 5)
+        columns:
+          - name: id
+            tests:
+              - unique:
+                  where: id > 5 
+              - not_null
